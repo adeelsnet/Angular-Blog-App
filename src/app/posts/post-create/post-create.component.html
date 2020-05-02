@@ -1,0 +1,55 @@
+<mat-card class='my-5 mat-elevation-z5 p-0'>
+    <mat-card-header class="mat-card-header">
+        <mat-card-title class="p-2">ADD POST</mat-card-title>
+    </mat-card-header>
+
+    <mat-divider></mat-divider>
+
+    <!-- <mat-card-content class="p-3">
+        <mat-form-field>
+            <input type='text' matInput required [(ngModel)]='enteredTitle' placeholder="Post Title">
+        </mat-form-field>
+        <mat-form-field>
+            <textarea matInput rows="6" placeholder="Post Body" [(ngModel)]='enteredBody'></textarea>
+        </mat-form-field>
+    </mat-card-content>
+
+    <mat-divider></mat-divider>
+
+    <button mat-raised-button type="button" class="m-2" color="accent" (click)="addPost()">ADD</button> -->
+
+    <form #postForm="ngForm" (ngSubmit)="addPost(postForm)">
+        <mat-card-content class="p-3">
+
+            <mat-form-field class="py-3">
+                <input name="title" #title="ngModel" type='text' matInput placeholder="Post Title" ngModel required>
+                <!-- <mat-error *ngIf="postForm.getControl('title').invalid">Title is required!</mat-error> -->
+                <mat-error *ngIf="title.errors?.required">Title is required.</mat-error>
+            </mat-form-field>
+
+            <!-- <mat-form-field>
+                <textarea name="body" #body="ngModel" matInput rows="6" placeholder="Post Body" ngModel required minlength="20"></textarea>
+                <mat-error *ngIf="body.errors?.required">Body text is required!</mat-error>
+                <mat-error *ngIf="body.errors?.minlength">Minimum characters should be 20!</mat-error>
+            </mat-form-field> -->
+
+            <!-- For CKEDITOR-5 -->
+            <!-- <ckeditor [editor]="Editor" (ready)="onReady($event)" name="body" #body="ngModel" matInput rows="6" placeholder="Post Body" ngModel required minlength="20"></ckeditor>
+            <mat-error *ngIf="body.errors?.required && body.touched">Body text is required!</mat-error>
+            <mat-error *ngIf="body.errors?.minlength">Minimum characters should be 20!</mat-error> -->
+
+            <!-- For CKEDITOR-4 -->
+            <ckeditor name="body" #body="ngModel" matInput rows="6" placeholder="Post Body" ngModel required minlength="20"></ckeditor>
+            <mat-error *ngIf="body.errors?.required && body.touched">Body text is required.</mat-error>
+            <mat-error *ngIf="body.errors?.minlength">A minimum of 20 characters is required.</mat-error>
+
+        </mat-card-content>
+
+        <mat-divider></mat-divider>
+
+        <button mat-raised-button type="submit" class="m-2" color="accent">ADD</button>
+    </form>
+
+</mat-card>
+
+<app-post-list></app-post-list>

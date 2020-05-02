@@ -14,6 +14,9 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     MaterialModule,
     RouterModule
+  ],
+  exports: [
+    LayoutComponent
   ]
 })
 export class LayoutModule { }

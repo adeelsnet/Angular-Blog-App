@@ -7,6 +7,10 @@
     </mat-sidenav>
     <mat-sidenav-content>
         <app-toolbar *ngIf='layoutConfig.toolbarMode != "fixed"' (menuToggle)='sideNav.toggle()'></app-toolbar>
-        <router-outlet></router-outlet>
+
+        <div class="container">
+            <router-outlet></router-outlet>
+        </div>
+
     </mat-sidenav-content>
 </mat-sidenav-container>
