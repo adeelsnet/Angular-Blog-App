@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 import { PostService } from '../post.service';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Post } from '../post';
 
 @Component({
   selector: 'app-post-create',
@@ -11,36 +11,50 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 })
 export class PostCreateComponent implements OnInit {
 
-  // CKEDITOR-5 START
-  //   public Editor = DecoupledEditor;
-  //   public onReady(editor) {
-  //     editor.ui.getEditableElement().parentElement.insertBefore(
-  //         editor.ui.view.toolbar.element,
-  //         editor.ui.getEditableElement()
-  //     );
-  // }
-  // CKEDITOR-5 END
+  editMode: boolean = false;
+  private postId: string;
+  post: Post = { title: '', body: '' };
 
-  // enteredTitle = '';
-  // enteredBody = '';
-
-  constructor(private postService: PostService) { }
+  constructor(private postService: PostService, public route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
+    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      if (paramMap.has('id')) { // the id passed in paramMap.has('id') has to be same as it define in routing module.
+        this.editMode = true;
+        this.postId = paramMap.get('id');
+        this.postService.getPost(this.postId).subscribe((res: any) => {
+          this.post = res.post;
+        });
+      } else {
+        this.editMode = false;
+        this.postId = null;
+      }
+    });
   }
 
-  addPost(form: NgForm) {
+  savePost(form: NgForm) {
     if (form.invalid) {
       return;
     } else {
-      const post = {
-        title: form.value.title,
-        body: form.value.body,
-        date: new Date()
+      if (this.editMode) {
+        const post = {
+          _id: this.postId,
+          title: form.value.title,
+          body: form.value.body,
+          likes: this.post.likes,
+          dislikes: this.post.dislikes,
+          comments: this.post.comments
+        }
+        this.postService.updatePost(post);
+      } else {
+        const post = {
+          title: form.value.title,
+          body: form.value.body
+        }
+        this.postService.addPost(post);
+        form.reset();
       }
-      // console.log(post);
-      this.postService.addPost(post);
-      form.reset();
+      this.router.navigate(['/']);
     }
   }
 }

@@ -11,7 +11,7 @@
 
             <mat-card-content class="my-3">
                 <!-- <p>{{post.body}}</p> -->
-                <div [innerHTML]='post.body'></div>
+                <div [innerHTML]='post.body | slice:0:150'></div>
             </mat-card-content>
 
             <mat-divider></mat-divider>
@@ -19,28 +19,32 @@
             <mat-card-actions class="card-footer">
                 <div>
                     <button mat-icon-button matTooltip='Like'>
-                    <mat-icon style="color: #338ee9" matBadge='1' matBadgeColor='accent'>thumb_up</mat-icon>
-                  </button>
+                      <mat-icon *ngIf='post.likes>0' style="color: #338ee9" matBadge={{post.likes}} matBadgeColor='accent' (click)='likePost(post)'>thumb_up</mat-icon>
+                      <mat-icon  *ngIf='post.likes<=0' style="color: #338ee9"matBadgeColor='accent' (click)='likePost(post)'>thumb_up</mat-icon>
+                    </button>
 
                     <button mat-icon-button matTooltip='Dislike'>
-                    <mat-icon style="color: #f1adbd" matBadge='1' matBadgeColor='accent'>thumb_down</mat-icon>
-                  </button>
+                      <mat-icon *ngIf='post.likes>0' style="color: #f1adbd" matBadge={{post.dislikes}} matBadgeColor='accent' (click)='dislikePost(post)'>thumb_down</mat-icon>
+                      <mat-icon *ngIf='post.likes<=0'  style="color: #f1adbd" matBadgeColor='accent' (click)='dislikePost(post)'>thumb_down</mat-icon>
+                    </button>
 
                     <button mat-icon-button matTooltip='Comments'>
-                    <mat-icon style="color: silver" matBadge='12' matBadgeColor='accent'>textsms</mat-icon>
-                  </button>
+                      <mat-icon *ngIf='post.comments.length>0' style="color: silver" matBadge={{post.comments.length}} matBadgeColor='accent'>textsms</mat-icon>
+                      <mat-icon *ngIf='post.comments.length<=0' style="color: silver" matBadgeColor='accent'>textsms</mat-icon>
+                    </button>
                 </div>
 
                 <div>
-                    <button mat-icon-button matTooltip='View'>
-                    <mat-icon color='primary'>visibility</mat-icon>
-                  </button>
+                    <a [routerLink]="['/post-view', post._id]" mat-icon-button matTooltip='View'>
+                        <mat-icon color='primary'>visibility</mat-icon>
+                    </a>
 
-                    <button mat-icon-button matTooltip='Edit'>
-                    <mat-icon color='orange'>create</mat-icon>
-                  </button>
+                    <!-- <button mat-icon-button matTooltip='Edit'> -->
+                    <a [routerLink]="['/post-edit', post._id]" mat-icon-button matTooltip='Edit'>
+                        <mat-icon color='orange'>create</mat-icon>
+                    </a>
 
-                    <button mat-icon-button matTooltip='Delete'>
+                    <button mat-icon-button matTooltip='Delete' (click)='deletePost(post._id)'>
                     <mat-icon color='warn'>delete</mat-icon>
                   </button>
                 </div>

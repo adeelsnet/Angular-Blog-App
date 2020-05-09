@@ -16,9 +16,23 @@ export class PostListComponent implements OnInit {
   ngOnInit(): void {
     // this.posts = this.postService.getPosts();
     this.postService.getPosts();
-    this.postService.updatedPosts().subscribe((posts: Post[]) =>{
+    this.postService.updatedPosts().subscribe((posts: Post[]) => {
       this.posts = posts;
     });
+  }
+
+  deletePost(id: string) {
+    this.postService.deletePost(id);
+  }
+
+  likePost(post: Post){
+    post.likes++;
+    this.postService.updatePost(post);
+  }
+
+  dislikePost(post: Post){
+    post.dislikes++;
+    this.postService.updatePost(post);
   }
 
 }

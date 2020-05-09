@@ -1,9 +1,9 @@
 export interface Post {
-  id?: string,
+  _id?: string,
   title: string,
   body: string,
   likes?: number,
   dislikes?: number,
-  date:  Date,
+  date?:  Date,
   comments?: string[],
 }
